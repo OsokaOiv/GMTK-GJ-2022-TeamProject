@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     private int gridLenght = 2;
     private Vector3 targetPosition, startPosition;
     private bool moving;
+    private Vector3 rotateAxis = Vector3.right;
 
     public int onTop;
     [SerializeField] private Transform[] Numbers;
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //playerTransform.rotation = Quaternion.Lerp(playerTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 90)), moveSpeed * Time.deltaTime);
         if (moving)
         {
             if (Vector3.Distance(startPosition, playerTransform.position) > 1f*gridLenght)
@@ -33,8 +35,8 @@ public class PlayerController : MonoBehaviour
                 return;
             }
             playerTransform.position += (targetPosition - startPosition) * moveSpeed * Time.deltaTime;
-            Vector3 relativePos = targetPosition - startPosition;
-            playerTransform.rotation = Quaternion.LookRotation(relativePos);
+            Quaternion rotR = Quaternion.AngleAxis(moveSpeed * 90 * Time.deltaTime, rotateAxis);
+            transform.rotation = rotR * transform.rotation;
             return;
         }
 
@@ -72,6 +74,7 @@ public class PlayerController : MonoBehaviour
         targetPosition = playerTransform.position + Vector3.forward * gridLenght;
         startPosition = playerTransform.position;
         moving = true;
+        rotateAxis = Vector3.right;
         //playerTransform.Rotate(new Vector3(90, 0, 0), Space.World);
     }
 
@@ -80,7 +83,8 @@ public class PlayerController : MonoBehaviour
         targetPosition = playerTransform.position + Vector3.left * gridLenght;
         startPosition = playerTransform.position;
         moving = true;
-        playerTransform.Rotate(new Vector3(0, 0, 90), Space.World);
+        rotateAxis = Vector3.forward;
+        //playerTransform.Rotate(new Vector3(0, 0, 90), Space.World);
     }
 
     private void MoveDown()
@@ -88,7 +92,8 @@ public class PlayerController : MonoBehaviour
         targetPosition = playerTransform.position + Vector3.back * gridLenght;
         startPosition = playerTransform.position;
         moving = true;
-        playerTransform.Rotate(new Vector3(-90, 0, 0), Space.World);
+        rotateAxis = Vector3.left;
+        //playerTransform.Rotate(new Vector3(-90, 0, 0), Space.World);
     }
 
     private void MoveRight()
@@ -96,7 +101,8 @@ public class PlayerController : MonoBehaviour
         targetPosition = playerTransform.position + Vector3.right * gridLenght;
         startPosition = playerTransform.position;
         moving = true;
-        playerTransform.Rotate(new Vector3(0, 0, -90), Space.World);
+        rotateAxis = Vector3.back;
+        //playerTransform.Rotate(new Vector3(0, 0, -90), Space.World);
     }
 
     #endregion
