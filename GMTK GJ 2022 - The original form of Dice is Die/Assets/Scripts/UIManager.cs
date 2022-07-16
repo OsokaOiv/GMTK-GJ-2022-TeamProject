@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            Restart();
         }
         else if (Input.GetKeyDown(KeyCode.N))
         {
@@ -31,6 +31,11 @@ public class UIManager : MonoBehaviour
     public void LoadNextLevel()
     {
         SceneManager.LoadScene((SceneManager.GetActiveScene().buildIndex+1) % 3);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ExitApplication()

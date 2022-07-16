@@ -2017,6 +2017,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 320354494}
+  ui: {fileID: 1317659018}
 --- !u!4 &504208916
 Transform:
   m_ObjectHideFlags: 0
