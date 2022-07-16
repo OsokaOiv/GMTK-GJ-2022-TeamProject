@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Transform[] Numbers;
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private LayerMask ground;
+    public LayerMask ground;
+    public LayerMask goal;
 
     private int gridLenght = 2;
     private bool moving;
@@ -31,9 +32,8 @@ public class PlayerController : MonoBehaviour
         //playerTransform.rotation = Quaternion.Lerp(playerTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 90)), moveSpeed * Time.deltaTime);
         if (moving)
         {
-            if (IsOnGround())
+            if (!IsOnGoal() && IsOnGround())
             {
-
                 if (Vector3.Distance(startPosition, playerTransform.position) > 1f*gridLenght*times)
                 {
                     playerTransform.position = targetPosition;
@@ -52,7 +52,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        GetInput();
+        if (IsOnGround())
+            GetInput();
     }
 
     #region Input
@@ -84,6 +85,20 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Movement and Animation
+
+    public bool IsOnGoal()
+    {
+        RaycastHit hit;
+        Ray downwardRay = new Ray(playerTransform.position, Vector3.down);
+        Debug.DrawRay(playerTransform.position, Vector3.down*10, Color.red, 2f);
+
+        if (Physics.Raycast(downwardRay, out hit, 10f, goal))
+        {
+            GetComponent<Animator>().enabled = true;
+            return true;
+        }
+        return false;
+    }
 
     private void MoveUp()
     {
@@ -130,7 +145,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         Ray downwardRay = new Ray(playerTransform.position, Vector3.down);
 
-        if(Physics.Raycast(downwardRay, out hit, ground))
+        if(Physics.Raycast(downwardRay, out hit, 10f, ground))
         {
             return true;
         }

@@ -5,10 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public bool win = false;
-
     [SerializeField] private PlayerController playerController;
-    [SerializeField] private Transform goalTransform;
 
     // Start is called before the first frame update
     void Start()
@@ -19,12 +16,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerController.playerTransform.position == goalTransform.position + Vector3.up*1.5f)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            win = true;
+            Application.Quit();
         }
-
-        if (Input.GetKeyDown(KeyCode.R))
+        else if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }

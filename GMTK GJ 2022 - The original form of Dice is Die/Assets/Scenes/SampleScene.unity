@@ -737,6 +737,7 @@ GameObject:
   - component: {fileID: 320354494}
   - component: {fileID: 320354496}
   - component: {fileID: 320354495}
+  - component: {fileID: 320354497}
   m_Layer: 0
   m_Name: Dice
   m_TagString: Untagged
@@ -778,7 +779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f131f5b6886ca674692048b2fd3bbd22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTransform: {fileID: 0}
+  playerTransform: {fileID: 320354493}
   onTop: 3
   times: 0
   fail: 0
@@ -793,6 +794,9 @@ MonoBehaviour:
   ground:
     serializedVersion: 2
     m_Bits: 8
+  goal:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!65 &320354495
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -822,6 +826,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!95 &320354497
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320354491}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f57b388969e80bf48891a0cd4ba7c0e2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &353368174 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f8973b0b1b8ed544cbc2c8c94be03ef9, type: 3}
@@ -1019,9 +1043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce446956201317d4d8b365829b471c4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  win: 0
   playerController: {fileID: 320354494}
-  goalTransform: {fileID: 1871898600}
 --- !u!4 &504208916
 Transform:
   m_ObjectHideFlags: 0
@@ -2536,11 +2558,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e19effec8c7278741b4689bec61f0a94, type: 3}
   m_PrefabInstance: {fileID: 1858471811}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1871898600 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e19effec8c7278741b4689bec61f0a94, type: 3}
-  m_PrefabInstance: {fileID: 1858471811}
-  m_PrefabAsset: {fileID: 0}
 --- !u!65 &1871898601
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2573,31 +2590,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 5434612704212794964, guid: f8973b0b1b8ed544cbc2c8c94be03ef9, type: 3}
---- !u!1 &1948815597 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f67b1eed812933940b5be8de1e960b7b, type: 3}
-  m_PrefabInstance: {fileID: 1218770789}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1948815600
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1948815597}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f57b388969e80bf48891a0cd4ba7c0e2, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1954739104 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f8973b0b1b8ed544cbc2c8c94be03ef9, type: 3}
