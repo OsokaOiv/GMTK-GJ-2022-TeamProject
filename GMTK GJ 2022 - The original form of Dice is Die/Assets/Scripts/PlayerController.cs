@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     private bool moving;
     private Vector3 rotateAxis = Vector3.right;
 
-    public int onTop;
+    public int onTop, times;
     [SerializeField] private Transform[] Numbers;
     [SerializeField] private float moveSpeed = 10f;
 
@@ -27,14 +27,14 @@ public class PlayerController : MonoBehaviour
         //playerTransform.rotation = Quaternion.Lerp(playerTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 90)), moveSpeed * Time.deltaTime);
         if (moving)
         {
-            if (Vector3.Distance(startPosition, playerTransform.position) > 1f*gridLenght)
+            if (Vector3.Distance(startPosition, playerTransform.position) > 1f*gridLenght*times)
             {
                 playerTransform.position = targetPosition;
                 moving = false;
                 DetermineOnTop();
                 return;
             }
-            playerTransform.position += (targetPosition - startPosition) * moveSpeed * Time.deltaTime;
+            playerTransform.position += (targetPosition - startPosition) * moveSpeed * Time.deltaTime / times;
             return;
         }
 
@@ -47,18 +47,22 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
+            DetermineNext(Vector3.back);
             MoveUp();
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
+            DetermineNext(Vector3.right);
             MoveLeft();
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
+            DetermineNext(Vector3.forward);
             MoveDown();
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
+            DetermineNext(Vector3.left);
             MoveRight();
         }
     }
@@ -69,46 +73,42 @@ public class PlayerController : MonoBehaviour
 
     private void MoveUp()
     {
-        targetPosition = playerTransform.position + Vector3.forward * gridLenght;
+        targetPosition = playerTransform.position + Vector3.forward * gridLenght * times;
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.right;
-        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
+        Quaternion rotR = Quaternion.AngleAxis(90 * times, rotateAxis);
         transform.rotation = rotR * transform.rotation;
-        //playerTransform.Rotate(new Vector3(90, 0, 0), Space.World);
     }
 
     private void MoveLeft()
     {
-        targetPosition = playerTransform.position + Vector3.left * gridLenght;
+        targetPosition = playerTransform.position + Vector3.left * gridLenght * times;
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.forward;
-        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
+        Quaternion rotR = Quaternion.AngleAxis(90 * times, rotateAxis);
         transform.rotation = rotR * transform.rotation;
-        //playerTransform.Rotate(new Vector3(0, 0, 90), Space.World);
     }
 
     private void MoveDown()
     {
-        targetPosition = playerTransform.position + Vector3.back * gridLenght;
+        targetPosition = playerTransform.position + Vector3.back * gridLenght * times;
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.left;
-        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
+        Quaternion rotR = Quaternion.AngleAxis(90 * times, rotateAxis);
         transform.rotation = rotR * transform.rotation;
-        //playerTransform.Rotate(new Vector3(-90, 0, 0), Space.World);
     }
 
     private void MoveRight()
     {
-        targetPosition = playerTransform.position + Vector3.right * gridLenght;
+        targetPosition = playerTransform.position + Vector3.right * gridLenght * times;
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.back;
-        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
+        Quaternion rotR = Quaternion.AngleAxis(90 * times, rotateAxis);
         transform.rotation = rotR * transform.rotation;
-        //playerTransform.Rotate(new Vector3(0, 0, -90), Space.World);
     }
 
     #endregion
@@ -119,9 +119,20 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < Numbers.Length; i++)
         {
-            if (Numbers[i].position.y == 1 * gridLenght)
+            if (Numbers[i].forward == Vector3.up)
             {
                 onTop = i + 1;
+            }
+        }
+    }
+
+    private void DetermineNext(Vector3 direction)
+    {
+        for (int i = 0; i < Numbers.Length; i++)
+        {
+            if (Numbers[i].forward == direction)
+            {
+                times = i + 1;
             }
         }
     }
