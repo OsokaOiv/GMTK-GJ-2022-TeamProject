@@ -35,8 +35,6 @@ public class PlayerController : MonoBehaviour
                 return;
             }
             playerTransform.position += (targetPosition - startPosition) * moveSpeed * Time.deltaTime;
-            Quaternion rotR = Quaternion.AngleAxis(moveSpeed * 90 * Time.deltaTime, rotateAxis);
-            transform.rotation = rotR * transform.rotation;
             return;
         }
 
@@ -75,6 +73,8 @@ public class PlayerController : MonoBehaviour
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.right;
+        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
+        transform.rotation = rotR * transform.rotation;
         //playerTransform.Rotate(new Vector3(90, 0, 0), Space.World);
     }
 
@@ -84,6 +84,8 @@ public class PlayerController : MonoBehaviour
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.forward;
+        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
+        transform.rotation = rotR * transform.rotation;
         //playerTransform.Rotate(new Vector3(0, 0, 90), Space.World);
     }
 
@@ -93,6 +95,8 @@ public class PlayerController : MonoBehaviour
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.left;
+        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
+        transform.rotation = rotR * transform.rotation;
         //playerTransform.Rotate(new Vector3(-90, 0, 0), Space.World);
     }
 
@@ -102,6 +106,8 @@ public class PlayerController : MonoBehaviour
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.back;
+        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
+        transform.rotation = rotR * transform.rotation;
         //playerTransform.Rotate(new Vector3(0, 0, -90), Space.World);
     }
 
