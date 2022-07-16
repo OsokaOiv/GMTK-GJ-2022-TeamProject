@@ -6,9 +6,12 @@ public class PlayerController : MonoBehaviour
 {
     private Transform playerTransform;
     private int gridLenght = 2;
+    private Vector3 targetPosition, startPosition;
+    private bool moving;
 
     public int onTop;
-    public Transform[] Numbers;
+    [SerializeField] private Transform[] Numbers;
+    [SerializeField] private float moveSpeed = 10f;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +23,21 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (moving)
+        {
+            if (Vector3.Distance(startPosition, playerTransform.position) > 1f*gridLenght)
+            {
+                playerTransform.position = targetPosition;
+                moving = false;
+                DetermineOnTop();
+                return;
+            }
+            playerTransform.position += (targetPosition - startPosition) * moveSpeed * Time.deltaTime;
+            Vector3 relativePos = targetPosition - startPosition;
+            playerTransform.rotation = Quaternion.LookRotation(relativePos);
+            return;
+        }
+
         GetInput();
     }
 
@@ -30,22 +48,18 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W))
         {
             MoveUp();
-            DetermineOnTop();
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
             MoveLeft();
-            DetermineOnTop();
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             MoveDown();
-            DetermineOnTop();
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
             MoveRight();
-            DetermineOnTop();
         }
     }
 
@@ -55,35 +69,33 @@ public class PlayerController : MonoBehaviour
 
     private void MoveUp()
     {
-        //playerTransform.position = playerTransform.position + Vector3.forward * gridLenght;
+        targetPosition = playerTransform.position + Vector3.forward * gridLenght;
+        startPosition = playerTransform.position;
+        moving = true;
         //playerTransform.Rotate(new Vector3(90, 0, 0), Space.World);
-        for (int i = 0; i < 30; i++)
-        {
-            StartCoroutine(MoveUpFrame());
-        }
-    }
-    IEnumerator MoveUpFrame()
-    {
-        playerTransform.Rotate(new Vector3(3, 0, 0), Space.World);
-        playerTransform.position = playerTransform.position + Vector3.forward * gridLenght / 30;
-        yield return new WaitForSeconds(.1f);
     }
 
     private void MoveLeft()
     {
-        playerTransform.position = playerTransform.position + Vector3.left * gridLenght;
+        targetPosition = playerTransform.position + Vector3.left * gridLenght;
+        startPosition = playerTransform.position;
+        moving = true;
         playerTransform.Rotate(new Vector3(0, 0, 90), Space.World);
     }
 
     private void MoveDown()
     {
-        playerTransform.position = playerTransform.position + Vector3.back * gridLenght;
+        targetPosition = playerTransform.position + Vector3.back * gridLenght;
+        startPosition = playerTransform.position;
+        moving = true;
         playerTransform.Rotate(new Vector3(-90, 0, 0), Space.World);
     }
 
     private void MoveRight()
     {
-        playerTransform.position = playerTransform.position + Vector3.right * gridLenght;
+        targetPosition = playerTransform.position + Vector3.right * gridLenght;
+        startPosition = playerTransform.position;
+        moving = true;
         playerTransform.Rotate(new Vector3(0, 0, -90), Space.World);
     }
 
