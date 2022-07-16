@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Transform playerTransform;
-    private int gridLenght = 2;
-    private Vector3 targetPosition, startPosition;
-    private bool moving;
-    private Vector3 rotateAxis = Vector3.right;
-
+    public Transform playerTransform;
     public int onTop, times;
+    public bool fail;
+
     [SerializeField] private Transform[] Numbers;
     [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private LayerMask ground;
+
+    private int gridLenght = 2;
+    private bool moving;
+    private Vector3 targetPosition, startPosition;
+    private Vector3 rotateAxis;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,15 +31,25 @@ public class PlayerController : MonoBehaviour
         //playerTransform.rotation = Quaternion.Lerp(playerTransform.rotation, Quaternion.Euler(new Vector3(0, 0, 90)), moveSpeed * Time.deltaTime);
         if (moving)
         {
-            if (Vector3.Distance(startPosition, playerTransform.position) > 1f*gridLenght*times)
+            if (IsOnGround())
             {
-                playerTransform.position = targetPosition;
-                moving = false;
-                DetermineOnTop();
+
+                if (Vector3.Distance(startPosition, playerTransform.position) > 1f*gridLenght*times)
+                {
+                    playerTransform.position = targetPosition;
+                    moving = false;
+                    DetermineOnTop();
+                    return;
+                }
+                playerTransform.position += (targetPosition - startPosition) * moveSpeed * Time.deltaTime / times;
                 return;
             }
-            playerTransform.position += (targetPosition - startPosition) * moveSpeed * Time.deltaTime / times;
-            return;
+            else
+            {
+                fail = true;
+                GetComponent<BoxCollider>().enabled = true;
+                GetComponent<Rigidbody>().useGravity = true;
+            }
         }
 
         GetInput();
@@ -77,7 +91,7 @@ public class PlayerController : MonoBehaviour
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.right;
-        Quaternion rotR = Quaternion.AngleAxis(90 * times, rotateAxis);
+        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
         transform.rotation = rotR * transform.rotation;
     }
 
@@ -87,7 +101,7 @@ public class PlayerController : MonoBehaviour
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.forward;
-        Quaternion rotR = Quaternion.AngleAxis(90 * times, rotateAxis);
+        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
         transform.rotation = rotR * transform.rotation;
     }
 
@@ -97,7 +111,7 @@ public class PlayerController : MonoBehaviour
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.left;
-        Quaternion rotR = Quaternion.AngleAxis(90 * times, rotateAxis);
+        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
         transform.rotation = rotR * transform.rotation;
     }
 
@@ -107,8 +121,20 @@ public class PlayerController : MonoBehaviour
         startPosition = playerTransform.position;
         moving = true;
         rotateAxis = Vector3.back;
-        Quaternion rotR = Quaternion.AngleAxis(90 * times, rotateAxis);
+        Quaternion rotR = Quaternion.AngleAxis(90, rotateAxis);
         transform.rotation = rotR * transform.rotation;
+    }
+
+    private bool IsOnGround()
+    {
+        RaycastHit hit;
+        Ray downwardRay = new Ray(playerTransform.position, Vector3.down);
+
+        if(Physics.Raycast(downwardRay, out hit, ground))
+        {
+            return true;
+        }
+        return false;
     }
 
     #endregion
